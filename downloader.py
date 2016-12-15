@@ -1,5 +1,9 @@
 import requests
+import thread
 import os
+import time
+
+chunkSize = 1024
 
 class Downloader:
 
@@ -7,7 +11,6 @@ class Downloader:
     response = {}
     totalLength = 0
     dl = 0
-    chunkSize = 1024
 
     def __call__(self):
         print "hi!"
@@ -30,11 +33,23 @@ class Downloader:
             # make directory
             if not os.path.exists("Downloads"):
                 os.makedirs("Downloads")
-            # start download
-            with open(self.fileName, "wb") as f:
-                for data in self.response.iter_content(chunk_size=self.chunkSize):
-                    self.dl += len(data)
-                    f.write(data)
+
+            # run downloader thread
+            try:
+                # TODO: add other thread for more speed!
+                thread.start_new_thread( self.startDownload, () )
+            except:
+               print "Error: unable to start thread"
+
+    def startDownload(self):
+        with open(self.fileName, "wb") as f:
+            for data in self.response.iter_content(chunk_size=chunkSize):
+                self.dl += len(data)
+                f.write(data)
 
     def status(self):
-        return bool(self.dl/self.totalLength)
+        return {
+            'size': self.totalLength,
+            'dl': self.dl,
+            'fileName': self.fileName
+            }
