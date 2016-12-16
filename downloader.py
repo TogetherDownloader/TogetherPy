@@ -11,9 +11,7 @@ class Downloader:
     response = {}
     totalLength = 0
     dl = 0
-
-    def __call__(self):
-        print "hi!"
+    inDownload = False
 
     def __init__(self, _url, startRange, endRange, partNum=-1):
         headers = {'Range': "bytes=" + str(startRange) + "-" + str(endRange) }
@@ -42,13 +40,16 @@ class Downloader:
                print "Error: unable to start thread"
 
     def startDownload(self):
+        self.inDownload = True
         with open(self.fileName, "wb") as f:
             for data in self.response.iter_content(chunk_size=chunkSize):
                 self.dl += len(data)
                 f.write(data)
+        self.inDownload = False
 
     def status(self):
         return {
+            'inDownload': self.inDownload,
             'size': self.totalLength,
             'dl': self.dl,
             'fileName': self.fileName

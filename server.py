@@ -3,7 +3,7 @@ import requests
 import sys
 import json
 
-port = 2222
+port = 1111
 chunkSize = 1048576
 # chunkSize = 1000000
 
