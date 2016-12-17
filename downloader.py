@@ -3,7 +3,7 @@ import thread
 import os
 import time
 
-chunkSize = 1024
+CHUNKSIZE = 1024
 
 class Downloader:
 
@@ -42,7 +42,7 @@ class Downloader:
     def startDownload(self):
         self.inDownload = True
         with open(self.fileName, "wb") as f:
-            for data in self.response.iter_content(chunk_size=chunkSize):
+            for data in self.response.iter_content(chunk_size=CHUNKSIZE):
                 self.dl += len(data)
                 f.write(data)
         self.inDownload = False
