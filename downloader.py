@@ -4,6 +4,7 @@ import os
 import time
 
 CHUNKSIZE = 1024
+obj = {}
 
 class Downloader:
 

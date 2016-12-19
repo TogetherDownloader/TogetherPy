@@ -2,6 +2,7 @@ import socket
 import requests
 import json
 import thread
+from mixer import Mixer
 
 PORT = 1111
 CHUNKSIZE = 1048576
@@ -10,13 +11,11 @@ BUFF = 1000000000
 # GLOBAL variables! TODO:move inside functions
 needToDownload = 0
 lastPart = 0
-url = ""
 
 
-def handler( connection, addr):
+def handler( url, connection, addr):
     global needToDownload
     global lastPart
-    global url
 
     try:
         print 'client connected: ', addr
@@ -82,6 +81,7 @@ def main():
 
     # Bind the socket to the port
     server_address = ('localhost', PORT)
+
     print 'Server is runnig on port ' + str(PORT)
     sock.bind(server_address)
 
@@ -91,7 +91,7 @@ def main():
     while True:
         print 'waiting for a connection...'
         connection, addr = sock.accept()
-        thread.start_new_thread(handler, (connection, addr))
+        thread.start_new_thread(handler, (url, connection, addr))
 
 
 
